@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caps & Closures — Lab Caps & Closures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #162240;
+    --navy-light: #1e3158;
+    --accent: #c8a96e;
+    --accent-light: #e8d09e;
+    --accent-pale: #f7f0e3;
+    --cream: #faf8f4;
+    --white: #ffffff;
+    --text-dark: #0a1628;
+    --text-mid: #4a5568;
+    --text-light: #8a9ab5;
+    --border: rgba(10,22,40,0.1);
+    --serif: 'Oxanium', sans-serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--cream);
+    color: var(--text-dark);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,22,40,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(200,169,110,0.2);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-logo .dot { color: var(--white); }
+  .nav-links { display: flex; align-items: center; gap: 2rem; }
+  .nav-links a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    background: var(--accent);
+    color: var(--navy) !important;
+    font-weight: 500 !important;
+    padding: 8px 20px;
+    border-radius: 4px;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--accent-light) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 92vh;
+    background: var(--navy);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(10,22,40,0.45);
+    z-index: 1;
+  }
+  .hero-left {
+    padding: 6rem 4rem 6rem 6rem;
+    position: relative; z-index: 2;
+  }
+  .hero-badge {
+    display: inline-block;
+    font-size: 1.25rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(200,169,110,0.4);
+    padding: 14px 30px;
+    border-radius: 2px;
+    margin-bottom: 2rem;
+  }
+
+  .hero-badge span {
+    display: inline-block;
+    animation: letterFloat 2.5s ease-in-out infinite;
+  }
+
+  .hero-badge span:nth-child(2)  { animation-delay: 0.1s; }
+  .hero-badge span:nth-child(3)  { animation-delay: 0.2s; }
+  .hero-badge span:nth-child(4)  { animation-delay: 0.3s; }
+  .hero-badge span:nth-child(5)  { animation-delay: 0.4s; }
+  .hero-badge span:nth-child(6)  { animation-delay: 0.5s; }
+  .hero-badge span:nth-child(7)  { animation-delay: 0.6s; }
+  .hero-badge span:nth-child(8)  { animation-delay: 0.7s; }
+  .hero-badge span:nth-child(9)  { animation-delay: 0.8s; }
+  .hero-badge span:nth-child(10) { animation-delay: 0.9s; }
+  .hero-badge span:nth-child(11) { animation-delay: 1.0s; }
+  .hero-badge span:nth-child(12) { animation-delay: 1.1s; }
+  .hero-badge span:nth-child(13) { animation-delay: 1.2s; }
+  .hero-badge span:nth-child(14) { animation-delay: 1.3s; }
+  .hero-badge span:nth-child(15) { animation-delay: 1.4s; }
+  .hero-badge span:nth-child(16) { animation-delay: 1.5s; }
+  .hero-badge span:nth-child(17) { animation-delay: 1.6s; }
+  .hero-badge span:nth-child(18) { animation-delay: 1.7s; }
+  .hero-badge span:nth-child(19) { animation-delay: 1.8s; }
+  .hero-badge span:nth-child(20) { animation-delay: 1.9s; }
+
+  @keyframes letterFloat {
+    0%, 100% { transform: translateY(0px);  color: var(--accent); }
+    50%       { transform: translateY(-6px); color: #ffffff; }
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 3.8vw, 3.8rem);
+    color: var(--white);
+    line-height: 1.12;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 300;
+    letter-spacing: 0.1em;
+  }
+  
+  .hero-sub {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+    max-width: 440px;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--navy);
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--accent-light); transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 0.9rem;
+    padding: 14px 28px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-right {
+    height: 100%;
+    min-height: 92vh;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 3px;
+    height: 100%;
+    min-height: 92vh;
+  }
+  .hero-cell {
+    background: rgba(10,22,40,0.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  
+  .hero-cell:hover { background: var(--navy-light); }
+  .hero-cell.accent { background: rgba(200,169,110,0.12); }
+  .hero-cell.accent:hover { background: rgba(200,169,110,0.2); }
+  .hero-cell-label {
+    position: absolute;
+    bottom: 18px;
+    left: 20px;
+
+    font-size: 1.15rem;
+    font-weight: 800;
+
+    color: #e0bc72;   /* brighter gold */
+
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+
+    text-shadow:
+        0 0 8px rgba(224,188,114,.8),
+        0 0 16px rgba(224,188,114,.5),
+        0 2px 10px rgba(0,0,0,.9);
+
+    z-index: 10;
+}
+  .cap-icon {
+    width: 56px; height: 56px;
+    opacity: 0.7;
+  }
+
+  .hero-product-img {
+    width: 78%;
+    height: 68%;
+    max-width: 340px;
+    max-height: 220px;
+
+    object-fit: contain;
+    display: block;
+    margin: auto;
+
+    background: rgba(255,255,255,0.98);
+    padding: 12px;
+    border-radius: 8px;
+
+    box-shadow:
+        0 0 35px rgba(200,169,110,0.18),
+        0 0 80px rgba(50,90,180,0.12),
+        0 20px 45px rgba(0,0,0,0.30);
+
+    transition: all .35s ease;
+}
+
+.hero-cell:hover .hero-product-img {
+    transform: scale(1.06);
+    box-shadow:
+        0 0 45px rgba(200,169,110,0.28),
+        0 0 100px rgba(70,120,255,0.18),
+        0 25px 55px rgba(0,0,0,0.35);
+}
+
+.hero-cell:hover .hero-product-img {
+    transform: scale(1.04);
+    box-shadow: 0 24px 55px rgba(0,0,0,0.35);
+}
+
+.hero-cell:hover .hero-product-img {
+    transform: scale(1.08);
+}
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--navy);
+    border-top: 1px solid rgba(200,169,110,0.15);
+    padding: 1.5rem 6rem;
+    display: flex; gap: 4rem;
+    align-items: center;
+  }
+  .stat-item { text-align: center; }
+  .stat-number {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .stat-divider {
+    width: 1px; height: 40px;
+    background: rgba(200,169,110,0.2);
+    margin: auto;
+  }
+
+  /* ── SECTION COMMON ── */
+  section { padding: 6rem 6rem; }
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    color: var(--text-dark);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  .section-sub {
+    font-size: 1rem;
+    color: var(--text-mid);
+    font-weight: 300;
+    max-width: 540px;
+    margin-bottom: 3rem;
+    line-height: 1.7;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+  .filter-btn {
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text-mid);
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--navy);
+    color: var(--accent);
+    border-color: var(--navy);
+  }
+
+  /* ── PRODUCT GRID ── */
+  .products-section { background: var(--cream); }
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    border: 1.5px solid var(--border);
+  }
+  .product-card {
+    background: var(--white);
+    padding: 2rem;
+    display: flex; flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.25s;
+    cursor: pointer;
+    border: none;
+    text-align: left;
+    overflow: visible;
+  }
+  .product-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0;
+    height: 2px; width: 0;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+  .product-card:hover { background: var(--accent-pale); }
+  .product-card:hover::after { width: 100%; }
+  .product-num {
+    font-family: var(--serif);
+    font-size: 3rem;
+    color: rgba(10,22,40,0.06);
+    line-height: 1;
+    position: absolute; top: 1rem; right: 1.5rem;
+  }
+  .product-cat {
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  .product-img-wrap{
+    width:110px;
+    height:110px;
+    background:var(--cream);
+    border-radius:8px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .2s ease, box-shadow .2s ease;
+    cursor:pointer;
+    transform-style: preserve-3d;
+}
+
+.product-img-wrap img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    transform: translateZ(50px);
+    transition:transform .2s ease;
+}
+
+.product-card:hover .product-img-wrap{
+    transform:scale(1.08);
+}
+
+.product-card:hover .product-img-wrap img{
+    transform:scale(1.15);
+}
+  .product-name {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    color: var(--text-dark);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  .product-desc {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    line-height: 1.6;
+    font-weight: 300;
+    flex: 1;
+  }
+  .product-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .product-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--text-light);
+  }
+  .product-arrow {
+    font-size: 1rem;
+    color: var(--accent);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: all 0.2s;
+  }
+  .product-card:hover .product-arrow { opacity: 1; transform: translateX(0); }
+
+  /* ── FEATURED STRIP ── */
+  .featured-strip {
+    background: var(--navy);
+    padding: 4rem 6rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .strip-text .section-title { color: var(--white); }
+  .strip-text .section-sub { color: rgba(255,255,255,0.45); }
+  .strip-cards { display: flex; gap: 1rem; }
+  .strip-card {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(200,169,110,0.15);
+    border-radius: 4px;
+    padding: 1.5rem;
+  }
+  .strip-card-icon {
+    width: 40px; height: 40px;
+    background: rgba(200,169,110,0.15);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+  }
+  .strip-card h3 {
+    font-family: var(--serif);
+    font-size: 1rem;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .strip-card p {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.4);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* ── MATERIALS GRID ── */
+  .materials-section { background: var(--white); }
+  .materials-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5px;
+    border: 1.5px solid var(--border);
+    margin-top: 2rem;
+  }
+  .material-card {
+    background: var(--cream);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .material-card:hover { background: var(--navy); }
+  .material-card:hover .mat-name { color: var(--accent); }
+  .material-card:hover .mat-desc { color: rgba(255,255,255,0.5); }
+  .mat-circle {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 300;
+    font-family: var(--serif);
+  }
+  .mat-name {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+  .mat-desc {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    line-height: 1.5;
+    font-weight: 300;
+    transition: color 0.2s;
+  }
+
+  /* ── CONTACT ── */
+  .contact-section {
+    background: var(--navy);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .contact-section .section-title { color: var(--white); }
+  .contact-section .section-sub { color: rgba(255,255,255,0.45); }
+  .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+  .contact-item { display: flex; gap: 1rem; align-items: flex-start; }
+  .contact-icon {
+    width: 36px; height: 36px; flex-shrink: 0;
+    background: rgba(200,169,110,0.15);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+  .contact-detail h4 { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .contact-detail p { font-size: 0.9rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+  .form-group input, .form-group select, .form-group textarea {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 3px;
+    padding: 11px 14px;
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: rgba(200,169,110,0.5);
+  }
+  .form-group select option { background: var(--navy); }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #06101e;
+    padding: 3rem 6rem;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid rgba(200,169,110,0.1);
+  }
+  .footer-logo {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  .footer-copy {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.25);
+    font-weight: 300;
+  }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.35);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-left > * { animation: fadeUp 0.7s ease both; }
+  .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-left > *:nth-child(2) { animation-delay: 0.25s; }
+  .hero-left > *:nth-child(3) { animation-delay: 0.4s; }
+  .hero-left > *:nth-child(4) { animation-delay: 0.5s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    section { padding: 4rem 2rem; }
+    nav { padding: 0 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 5rem 2rem; }
+    .stats-bar { padding: 2rem; gap: 2rem; flex-wrap: wrap; }
+    .product-grid { grid-template-columns: 1fr 1fr; }
+    .materials-grid { grid-template-columns: 1fr 1fr; }
+    .featured-strip { grid-template-columns: 1fr; padding: 3rem 2rem; gap: 2rem; }
+    .contact-section { grid-template-columns: 1fr; padding: 4rem 2rem; gap: 3rem; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 2.5rem 2rem; }
+  }
+  @media (max-width: 600px) {
+    .product-grid { grid-template-columns: 1fr; }
+    .materials-grid { grid-template-columns: 1fr 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .strip-cards { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Caps &amp; Closures</a>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#materials">Materials</a>
+    <a href="https://www.chemscience.com/about-us" target="_blank">About</a>
+    <a href="#contact" class="nav-cta">Request a Quote</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding:0;position:relative;overflow:hidden;">
+  <video autoplay muted loop playsinline
+  style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0.5;">
+  <source src="lab-bg.mp4" type="video/mp4">
+</video>
+  <div class="hero-left">
+    <div class="hero-badge"><span>L</span><span>A</span><span>B</span><span>&nbsp;</span><span>G</span><span>L</span><span>A</span><span>S</span><span>S</span><span>W</span><span>A</span><span>R</span><span>E</span><span>&nbsp;</span><span>S</span><span>P</span><span>E</span><span>C</span><span>I</span><span>A</span><span>L</span><span>I</span><span>S</span><span>T</span><span>S</span></div>
+    <h1>Precision caps<br>for <em>every</em><br>application</h1>
+    <p class="hero-sub">From polypropylene closures to high-temperature PTFE seals — find the exact cap or closure your lab needs, with fast delivery and expert guidance.</p>
+    <div class="hero-actions">
+      <a href="#products" class="btn-primary">Browse Products</a>
+      <a href="#contact" class="btn-ghost">Get a Quote</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-grid">
+
+  <div class="hero-cell accent">
+    <img src="images/polypropylene-caps.png" alt="Polypropylene Caps" class="hero-product-img">
+    <span class="hero-cell-label">Polypropylene</span>
+  </div>
+
+  <div class="hero-cell">
+    <img src="images/phenolic-caps.png" alt="Phenolic Caps" class="hero-product-img">
+    <span class="hero-cell-label">Phenolic</span>
+  </div>
+
+  <div class="hero-cell">
+    <img src="images/chromatography-caps.png" alt="Septa &amp; Seals" class="hero-product-img">
+    <span class="hero-cell-label">Septa &amp; Seals</span>
+  </div>
+
+  <div class="hero-cell accent">
+    <img src="images/silicone-rings.png" alt="GL Threads" class="hero-product-img">
+    <span class="hero-cell-label">GL Threads</span>
+  </div>
+
+  <div class="hero-cell">
+    <img src="images/pouring-rings.png" alt="Pouring Rings" class="hero-product-img">
+    <span class="hero-cell-label">Pouring Rings</span>
+  </div>
+
+  <div class="hero-cell">
+    <img src="images/ptfe-seals.png" alt="PTFE Seals" class="hero-product-img">
+    <span class="hero-cell-label">PTFE Seals</span>
+  </div>
+
+</div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item"><span class="stat-number">9+</span><span class="stat-label">Product Categories</span></div>
+  <div class="stat-divider"></div>
+  <div class="stat-item"><span class="stat-number">−45°</span><span class="stat-label">to +200°C Range</span></div>
+  <div class="stat-divider"></div>
+  <div class="stat-item"><span class="stat-number">GL14–45</span><span class="stat-label">Thread Sizes</span></div>
+  <div class="stat-divider"></div>
+  <div class="stat-item"><span class="stat-number">100%</span><span class="stat-label">Autoclavable Options</span></div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="products">
+  <div class="section-label">Catalog</div>
+  <h2 class="section-title">Caps &amp; Closures</h2>
+  <p class="section-sub">Every closure in our range is selected for chemical compatibility, dimensional precision, and long-term reliability in lab environments.</p>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterProducts('all', this)">All Products</button>
+    <button class="filter-btn" onclick="filterProducts('plastic', this)">Plastic</button>
+    <button class="filter-btn" onclick="filterProducts('septa', this)">Septa &amp; Seals</button>
+    <button class="filter-btn" onclick="filterProducts('gl', this)">GL Thread</button>
+    <button class="filter-btn" onclick="filterProducts('high-temp', this)">High Temp</button>
+  </div>
+
+  <div class="product-grid" id="productGrid">
+
+    <div class="product-card"
+     data-cat="plastic gl"
+     onclick="window.location.href='gl45-polypropylene-color-caps.html'">
+      <span class="product-num">01</span>
+      <span class="product-cat">Polypropylene · GL45</span>
+
+      <div class="product-img-wrap">
+    <img src="images/mainpagecapimage.png" alt="Solid Color Caps GL45">
+</div>
+
+      <div class="product-name">Solid Color Caps,<br>GL-45 Threads</div>
+
+      <p class="product-desc">
+        Solid polypropylene caps with a molded-in lip seal. Autoclavable to 140°C.
+        Available in a full range of colors for easy sample identification.
+      </p>
+
+      <div class="product-footer">
+        <div class="product-tags">
+          <span class="tag">PP</span>
+          <span class="tag">140°C</span>
+          <span class="tag">GL45</span>
+        </div>
+        <span class="product-arrow">→</span>
+      </div>
+
+</div>
+
+    <div class="product-card"
+     data-cat="plastic"
+     onclick="window.location.href='polypropylene-vial-caps.html'">
+
+      <span class="product-num">02</span>
+      <span class="product-cat">Polypropylene</span>
+
+      <div class="product-img-wrap">
+        <img src="images/mainpagepolypropelene.png" alt="Polypropylene Caps">
+      </div>
+
+      <div class="product-name">Polypropylene<br>Vial Caps</div>
+
+      <p class="product-desc">
+        Known for impact strength, durability, cost effectiveness,
+        thermal resistance, and pliability. Compatible with EPA vials,
+        headspace vials, and standard containers.
+      </p>
+
+      <div class="product-footer">
+        <div class="product-tags">
+          <span class="tag">PP</span>
+          <span class="tag">EPA</span>
+          <span class="tag">Multi-port</span>
+        </div>
+        <span class="product-arrow">→</span>
+      </div>
+
+</div>
+    <div class="product-card"
+     data-cat="plastic high-temp"
+     onclick="window.open('https://www.chemscience.com/products/caps-and-closures/phenolic-caps','_blank')">
+
+      <span class="product-num">03</span>
+      <span class="product-cat">Thermoset</span>
+
+      <div class="product-img-wrap">
+        <img src="images/mainpagephenoliccap.png" alt="Phenolic Caps">
+      </div>
+
+      <div class="product-name">Phenolic<br>Caps</div>
+
+      <p class="product-desc">
+        Made from thermoset plastic known for its binding properties and heat resistance.
+        For culture tubes and vials requiring superior chemical compatibility.
+      </p>
+
+      <div class="product-footer">
+        <div class="product-tags">
+          <span class="tag">Phenolic</span>
+          <span class="tag">Heat-resistant</span>
+        </div>
+        <span class="product-arrow">→</span>
+      </div>
+
+</div>
+
+    <div class="product-card"
+     data-cat="high-temp septa"
+     onclick="window.open('https://www.chemscience.com/products/caps-and-closures/high-temperature-caps-solid-pbte-ptfe-seals','_blank')">
+
+      <span class="product-num">04</span>
+      <span class="product-cat">High Temperature · PTFE</span>
+
+      <div class="product-img-wrap">
+        <img src="images/mainpageBTE + PTFE Seal.png" alt="high-temperature-caps-solid-pbte-ptfe-seals Caps">
+      </div>
+
+      <div class="product-name">High Temp Caps,<br>PBTE + PTFE Seal</div>
+
+      <p class="product-desc">
+        PBTE cap withstands −45°C to +200°C. Complete with PTFE seal for exceptional
+        chemical inertness. Ideal for extreme process environments.
+      </p>
+
+      <div class="product-footer">
+        <div class="product-tags">
+          <span class="tag">200°C</span>
+          <span class="tag">PTFE</span>
+          <span class="tag">PBTE</span>
+        </div>
+        <span class="product-arrow">→</span>
+      </div>
+
+</div>
+
+    <div class="product-card"
+     data-cat="septa gl"
+     onclick="window.open('https://www.chemscience.com/products/caps-and-closures/caps-and-septa-for-chromatography-vials','_blank')">
+
+      <span class="product-num">05</span>
+      <span class="product-cat">Chromatography · Septa</span>
+
+      <div class="product-img-wrap">
+        <img src="images/mainpagecap&septa.png" alt="Vial closure protection, crimp top (ND11)">
+      </div>
+
+      <div class="product-name">Caps &amp; Septa for<br>Chromatography Vials</div>
+
+      <p class="product-desc">
+        Vial closures that protect compound mixtures from contamination.
+        Screw thread, crimp top (ND11), and headspace vial formats available.
+      </p>
+
+      <div class="product-footer">
+        <div class="product-tags">
+          <span class="tag">Crimp</span>
+          <span class="tag">ND11</span>
+          <span class="tag">Headspace</span>
+        </div>
+        <span class="product-arrow">→</span>
+      </div>
+
+</div>
+
+    <div class="product-card"
+     data-cat="plastic"
+     onclick="window.open('https://www.chemscience.com/products/caps-and-closures/plastic-caps-for-test-tubes','_blank')">
+
+      <span class="product-num">06</span>
+      <span class="product-cat">Test Tubes</span>
+
+      <div class="product-img-wrap">
+        <img src="images/mainpageplasticcap.png" alt="reliable closures for standard laboratory test tubes, Colorful ">
+      </div>
+
+      <div class="product-name">Plastic Caps<br>for Test Tubes</div>
+
+      <p class="product-desc">
+        Colorful, reliable closures for standard laboratory test tubes.
+        Available in multiple colors and sizes to suit your workflow and
+        sample management system.
+      </p>
+
+      <div class="product-footer">
+        <div class="product-tags">
+          <span class="tag">Color-coded</span>
+          <span class="tag">Test Tubes</span>
+        </div>
+        <span class="product-arrow">→</span>
+      </div>
+
+</div>
+
+    <div class="product-card"
+     data-cat="gl"
+     onclick="window.open('https://www.chemscience.com/products/caps-and-closures/gl-caps-with-aperture','_blank')">
+
+      <span class="product-num">07</span>
+      <span class="product-cat">GL Thread · Open Top</span>
+
+      <div class="product-img-wrap">
+        <img src="images/mainpageGLcap.png" alt=" Open-top cap for GL screw threads, Available in GL14 through GL45 ">
+      </div>
+
+      <div class="product-name">GL Caps<br>With Aperture</div>
+
+      <p class="product-desc">
+        Open-top cap for GL screw threads. Combined with CS-197 sealing ring,
+        accommodates tubing of the listed diameter. Available in GL14 through GL45.
+      </p>
+
+      <div class="product-footer">
+        <div class="product-tags">
+          <span class="tag">GL14–45</span>
+          <span class="tag">Open Top</span>
+        </div>
+        <span class="product-arrow">→</span>
+      </div>
+
+</div>
+
+    <div class="product-card"
+     data-cat="gl septa"
+     onclick="window.open('https://www.chemscience.com/products/caps-and-closures/silicone-sealing-rings-for-gl-threads','_blank')">
+
+      <span class="product-num">08</span>
+      <span class="product-cat">GL Thread · Silicone</span>
+
+      <div class="product-img-wrap">
+        <img src="images/mainpagesiliconsealing.png" alt=" Seal made from vulcanized PTFE washer, For use with CS-CG-14/18/25/32 caps ">
+      </div>
+
+      <div class="product-name">Silicone Sealing<br>Rings for GL Threads</div>
+
+      <p class="product-desc">
+        Seal made from silicone with a vulcanized PTFE washer having an aperture
+        to fit the listed tubing size. For use with CS-CG-14/18/25/32 caps.
+      </p>
+
+      <div class="product-footer">
+        <div class="product-tags">
+          <span class="tag">Silicone</span>
+          <span class="tag">PTFE</span>
+          <span class="tag">GL14–32</span>
+        </div>
+        <span class="product-arrow">→</span>
+      </div>
+
+</div>
+
+    <div class="product-card"
+     data-cat="gl plastic"
+     onclick="window.open('https://www.chemscience.com/products/caps-and-closures/pouring-rings-gl-45-polypropylene','_blank')">
+
+      <span class="product-num">09</span>
+      <span class="product-cat">GL45 · Polypropylene</span>
+
+      <div class="product-img-wrap">
+        <img src="images/mainpagepouringring.png" alt=" drip-free polypropylene pour rings for GL-45 media bottles and flasks">
+      </div>
+
+      <div class="product-name">Pouring Rings,<br>GL-45, Polypropylene</div>
+
+      <p class="product-desc">
+        Clear, drip-free polypropylene pour rings for GL-45 media bottles and flasks.
+        Maximum temperature tolerance — a simple solution for clean liquid transfer.
+      </p>
+
+      <div class="product-footer">
+        <div class="product-tags">
+          <span class="tag">GL45</span>
+          <span class="tag">Drip-free</span>
+          <span class="tag">Clear PP</span>
+        </div>
+        <span class="product-arrow">→</span>
+      </div>
+
+</div>
+
+  </div>
+</section>
+
+<!-- FEATURED STRIP -->
+<div class="featured-strip">
+  <div class="strip-text">
+    <div class="section-label">Why Choose Us</div>
+    <h2 class="section-title" style="color:var(--white);">Built for the lab, not the shelf</h2>
+    <p class="section-sub">Every product is sourced with quality and precision in mind.</p>
+  </div>
+  <div class="strip-cards">
+    <div class="strip-card">
+      <div class="strip-card-icon">🔬</div>
+      <h3>Lab-tested compatibility</h3>
+      <p>All caps verified for chemical resistance across common solvents and reagents.</p>
+    </div>
+    <div class="strip-card">
+      <div class="strip-card-icon">🚀</div>
+      <h3>Fast fulfillment</h3>
+      <p>Most items in stock and ready to ship within 1–2 business days.</p>
+    </div>
+    <div class="strip-card">
+      <div class="strip-card-icon">🎯</div>
+      <h3>Precise fit guaranteed</h3>
+      <p>Dimensional tolerances matched to leading bottle and vial manufacturers.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MATERIALS -->
+<section class="materials-section" id="materials">
+  <div class="section-label">Materials Guide</div>
+  <h2 class="section-title">Choose by material</h2>
+  <p class="section-sub">Each material offers a unique combination of chemical resistance, temperature range, and mechanical properties.</p>
+  <div class="materials-grid">
+    <div class="material-card"
+     onclick="window.open('https://www.chemscience.com/products/caps-and-closures/polypropylene-caps','_blank')">
+
+      <div class="mat-circle" style="background: rgba(100,150,255,0.12); color:#2a5fc4;">PP</div>
+
+      <div class="mat-name">Polypropylene</div>
+
+      <div class="mat-desc">
+        Up to 140°C · Autoclavable · Impact resistant · Cost effective
+      </div>
+
+</div>
+    <div class="material-card"
+     onclick="window.open('https://www.chemscience.com/products/caps-and-closures/phenolic-caps','_blank')">
+
+      <div class="mat-circle" style="background: rgba(50,50,50,0.1); color:#333;">Ph</div>
+
+      <div class="mat-name">Phenolic</div>
+
+      <div class="mat-desc">
+        Thermoset · Chemical resistant · High strength · Heat stable
+      </div>
+
+</div>
+    <div class="material-card"
+     onclick="window.open('https://www.chemscience.com/products/caps-and-closures/high-temperature-caps-solid-pbte-ptfe-seals','_blank')">
+
+      <div class="mat-circle" style="background: rgba(220,80,80,0.12); color:#b03030;">PB</div>
+
+      <div class="mat-name">PBTE + PTFE</div>
+
+      <div class="mat-desc">
+        −45° to +200°C · Inert seal · Extreme environments
+      </div>
+
+</div>
+    <div class="material-card"
+     onclick="window.open('https://www.chemscience.com/products/caps-and-closures/silicone-sealing-rings-for-gl-threads','_blank')">
+
+      <div class="mat-circle" style="background: rgba(100,200,150,0.15); color:#287050;">Si</div>
+
+      <div class="mat-name">Silicone</div>
+
+      <div class="mat-desc">
+        Flexible · PTFE lined · GL thread compatible · Vulcanized
+      </div>
+
+</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div>
+    <div class="section-label">Get in Touch</div>
+    <h2 class="section-title">Request a quote<br>or ask an expert</h2>
+    <p class="section-sub">Not sure which closure fits your application? Our team can help you select the right product.</p>
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div class="contact-detail">
+          <h4>Phone</h4>
+          <p>438-863-4822</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">✉️</div>
+        <div class="contact-detail">
+          <h4>General</h4>
+          <p>admin@chemscience.com</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">💼</div>
+        <div class="contact-detail">
+          <h4>Sales</h4>
+          <p>admin@chemscience.com</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="contact-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First name</label>
+          <input type="text" placeholder="Jane">
+        </div>
+        <div class="form-group">
+          <label>Last name</label>
+          <input type="text" placeholder="Smith">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" placeholder="jane@lab.com">
+      </div>
+      <div class="form-group">
+        <label>Product interest</label>
+        <select>
+          <option value="">Select a category...</option>
+          <option>Polypropylene Caps</option>
+          <option>Phenolic Caps</option>
+          <option>High Temperature Caps</option>
+          <option>Chromatography Septa</option>
+          <option>GL Thread Caps</option>
+          <option>Silicone Sealing Rings</option>
+          <option>Pouring Rings</option>
+          <option>Other / Not Sure</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Tell us about your application, volume requirements, or any specific questions..."></textarea>
+      </div>
+      <div class="form-group">
+    <label>Message</label>
+    <textarea placeholder="Tell us about your application, volume requirements, or any specific questions..."></textarea>
+</div>
+
+<button class="btn-primary"
+        style="align-self:flex-start;"
+        onclick="window.location.href='mailto:admin@chemscience.com?subject=Caps%20and%20Closures%20Inquiry'">
+    Send Inquiry →
+</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Caps &amp; Closures</div>
+  <div class="footer-copy">© 2025 CapsAndClosures.com · Laboratory Caps &amp; Closures</div>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  function filterProducts(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.product-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat.includes(cat)) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  function handleSubmit() {
+    alert('Thank you! We\'ll be in touch shortly.');
+  }
+
+  // Smooth reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.product-card, .material-card, .strip-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease, background 0.25s';
+    observer.observe(el);
+
+    
+  });
+
+  
+</script>
+
+<script>
+document.querySelectorAll('.product-img-wrap').forEach(card => {
+
+    card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const rotateY = ((x / rect.width) - 0.5) * 30;
+const rotateX = ((y / rect.height) - 0.5) * -30;
+
+card.style.transform =
+`perspective(1000px) scale(2.2) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+        card.style.boxShadow =
+            `${-rotateY}px ${rotateX}px 35px rgba(0,0,0,0.18)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(600px) scale(1)';
+        card.style.boxShadow = 'none';
+    });
+
+});
+</script>
+</body>
+</html>
