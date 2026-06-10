@@ -1,0 +1,27 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Node (if you add it later)
+node_modules/
+
+# Environment files
+.env
+.env.*
+
+# Temporary files
+*.tmp
+*.temp
+
+# Build folders
+dist/
+build/
+
+# GitHub Desktop
+*.orig
