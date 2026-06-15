@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<style></style><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,7 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
 <style>
+  
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
@@ -499,6 +501,106 @@ filter:
   }
   .product-card:hover .product-arrow { opacity: 1; transform: translateX(0); }
 
+  .rfq-btn{
+    background: transparent;
+    border: 1px solid #c8a96e;
+    color: #c8a96e;
+
+    padding: 8px 16px;
+    border-radius: 2px;
+
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+
+    transition: all .25s ease;
+    cursor: pointer;
+}
+
+.rfq-btn:hover{
+    background: #c8a96e;
+    color: #0a1628;
+
+    box-shadow:
+        0 0 15px rgba(200,169,110,.35);
+}
+
+/* ================= RFQ DASHBOARD ================= */
+
+.rfq-dashboard{
+    position:fixed;
+    top:90px;
+    right:30px;
+
+    width:380px;
+
+    background:white;
+    color:#0a1628;
+
+    padding:25px;
+    border-radius:12px;
+
+    box-shadow:0 30px 80px rgba(0,0,0,.35);
+
+    z-index:999999;
+
+    display:none;
+}
+
+.rfq-dashboard.active{
+    display:block;
+}
+
+.rfq-dashboard h3{
+    margin-bottom:15px;
+}
+
+.rfq-dashboard input,
+.rfq-dashboard textarea{
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border:1px solid #ddd;
+    border-radius:6px;
+}
+
+.rfq-submit{
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+
+    background:#c8a96e;
+    border:none;
+    border-radius:6px;
+
+    cursor:pointer;
+}
+
+.rfq-close{
+    position:absolute;
+    top:14px;
+    right:16px;
+
+    width:28px !important;
+    height:28px !important;
+
+    background:transparent !important;
+    border:none !important;
+
+    color:#0a1628;
+    font-size:22px;
+    line-height:1;
+
+    cursor:pointer;
+    padding:0 !important;
+    margin:0 !important;
+}
+
+.rfq-close:hover{
+    color:#c8a96e;
+}
+
   /* ── FEATURED STRIP ── */
   .featured-strip {
     background: var(--navy);
@@ -952,7 +1054,15 @@ box-shadow:
           <span class="tag">PP</span>
           <span class="tag">140°C</span>
           <span class="tag">GL45</span>
+          
         </div>
+        <button type="button"
+    class="rfq-btn"
+    data-name="Solid Color Caps GL45"
+    data-sku="CAP-01"
+    onclick="event.stopPropagation(); document.getElementById('rfqDashboard').classList.add('active');">
+    Add to RFQ
+</button>
         <span class="product-arrow">→</span>
       </div>
 
@@ -983,6 +1093,12 @@ box-shadow:
           <span class="tag">EPA</span>
           <span class="tag">Multi-port</span>
         </div>
+        <button class="rfq-btn"
+         data-name="Polypropylene Vial Caps"
+         data-sku="CAP-02"
+         onclick="event.stopPropagation(); document.getElementById('rfqDashboard').classList.add('active');">
+         Add to RFQ
+       </button>
         <span class="product-arrow">→</span>
       </div>
 
@@ -1010,6 +1126,12 @@ box-shadow:
           <span class="tag">Phenolic</span>
           <span class="tag">Heat-resistant</span>
         </div>
+        <button class="rfq-btn"
+        data-name="Phenolic Caps"
+        data-sku="CAP-03"
+        onclick="event.stopPropagation(); document.getElementById('rfqDashboard').classList.add('active');">
+        Add to RFQ
+       </button>
         <span class="product-arrow">→</span>
       </div>
 
@@ -1039,6 +1161,12 @@ box-shadow:
           <span class="tag">PTFE</span>
           <span class="tag">PBTE</span>
         </div>
+        <button class="rfq-btn"
+        data-name="High Temp Caps PBTE PTFE"
+        data-sku="CAP-04"
+        onclick="event.stopPropagation(); document.getElementById('rfqDashboard').classList.add('active');">
+        Add to RFQ
+       </button>
         <span class="product-arrow">→</span>
       </div>
 
@@ -1068,6 +1196,12 @@ box-shadow:
           <span class="tag">ND11</span>
           <span class="tag">Headspace</span>
         </div>
+        <button class="rfq-btn"
+        data-name="Chromatography Caps Septa"
+        data-sku="CAP-05"
+        onclick="event.stopPropagation(); document.getElementById('rfqDashboard').classList.add('active');">
+        Add to RFQ
+       </button>
         <span class="product-arrow">→</span>
       </div>
 
@@ -1097,6 +1231,12 @@ box-shadow:
           <span class="tag">Color-coded</span>
           <span class="tag">Test Tubes</span>
         </div>
+        <button class="rfq-btn"
+        data-name="Plastic Caps Test Tubes"
+        data-sku="CAP-06"
+        onclick="event.stopPropagation(); document.getElementById('rfqDashboard').classList.add('active');">
+        Add to RFQ
+        </button>
         <span class="product-arrow">→</span>
       </div>
 
@@ -1125,6 +1265,12 @@ box-shadow:
           <span class="tag">GL14–45</span>
           <span class="tag">Open Top</span>
         </div>
+        <button class="rfq-btn"
+        data-name="GL Caps With Aperture"
+        data-sku="CAP-07"
+        onclick="event.stopPropagation(); document.getElementById('rfqDashboard').classList.add('active');">
+        Add to RFQ
+       </button>
         <span class="product-arrow">→</span>
       </div>
 
@@ -1154,6 +1300,12 @@ box-shadow:
           <span class="tag">PTFE</span>
           <span class="tag">GL14–32</span>
         </div>
+        <button class="rfq-btn"
+        data-name="Silicone Sealing Rings"
+        data-sku="CAP-08"
+        onclick="event.stopPropagation(); document.getElementById('rfqDashboard').classList.add('active');">
+        Add to RFQ
+       </button>
         <span class="product-arrow">→</span>
       </div>
 
@@ -1183,6 +1335,12 @@ box-shadow:
           <span class="tag">Drip-free</span>
           <span class="tag">Clear PP</span>
         </div>
+        <button class="rfq-btn"
+        data-name="Pouring Rings GL45"
+        data-sku="CAP-09"
+        onclick="event.stopPropagation(); document.getElementById('rfqDashboard').classList.add('active');">
+        Add to RFQ
+       </button>
         <span class="product-arrow">→</span>
       </div>
 
@@ -1540,10 +1698,66 @@ if (ptfeImg) {
 
 }
 
+// ================= RFQ SYSTEM =================
+// ================= RFQ SYSTEM =================
+
+let rfqItems = [];
+
+function addToRFQ(button){
+    const item = {
+        name: button.dataset.name,
+        sku: button.dataset.sku
+    };
+
+    rfqItems.push(item);
+
+    document.getElementById("rfqDashboard").classList.add("active");
+
+    document.getElementById("rfqItems").innerHTML = rfqItems.map(item => `
+        <div style="padding:10px 0; border-bottom:1px solid #ddd;">
+            <strong>${item.name}</strong><br>
+            <small>${item.sku}</small>
+        </div>
+    `).join("");
+}
+
+function submitRFQ(){
+    alert("RFQ submitted with " + rfqItems.length + " products.");
+}
+
+document.getElementById("rfqCloseBtn").addEventListener("click", function () {
+    document.getElementById("rfqDashboard").classList.remove("active");
+});
+    
+
+
 </script>
 
   <div class="floating-logo">
     <img src="images/chemscience.png" alt="ChemScience Logo">
+</div>
+<!-- RFQ DASHBOARD -->
+
+<div class="rfq-dashboard" id="rfqDashboard">
+
+    <button
+    class="rfq-close"
+    onclick="document.getElementById('rfqDashboard').classList.remove('active')">
+    &times;
+</button>
+
+    <h3>Request a Quote</h3>
+
+    <div id="rfqItems"></div>
+
+    <input type="text" id="rfqName" placeholder="Your Name">
+    <input type="email" id="rfqEmail" placeholder="Email">
+
+    <textarea id="rfqMessage"
+        placeholder="Quantity, comments, special requests"></textarea>
+
+    <button class="rfq-submit" onclick="submitRFQ()">Submit RFQ</button>
+
 </div>
 </body>
 </html>
